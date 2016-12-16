@@ -122,6 +122,7 @@ def com_thread(_i, _ident):
         globals()['stack_list_' + str(_ident)].append(add_list)
         print('reading stack_list_' + str(_ident) + ': ' + str(globals()['stack_list_' + str(_ident)]))
 
+
 class com_stack():
 
     def __init__(self):

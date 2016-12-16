@@ -12,6 +12,7 @@ import os
 push_button = logic.push_button        # initialize the pushbutton
 traffic_lights = logic.traffic_lights
 
+
 class FtcGuiApplication(TouchApplication):
 
     def __init__(self, args):
