@@ -53,7 +53,7 @@ class FtcGuiApplication(TouchApplication):
         traffic_lights.set_pattern('yellow', [False, False, False, False])
         traffic_lights.set_pattern('green', [True, True, True, True])
         traffic_lights.set_new()
-        confirm = ConfirmationDialog('Vorgang Starten?', 'YES', 'NO')
+        confirm = ConfirmationDialog('Vorgang Starten?', 'YES', 'NO', 10000)
         confirm.exec_()
         confirm_str = confirm.get()
         print(confirm_str)

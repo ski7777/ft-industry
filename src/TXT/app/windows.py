@@ -10,7 +10,7 @@ import time
 
 class ConfirmationDialog(PlainDialog):
 
-    def __init__(self, str, t1, t2):
+    def __init__(self, str, t1, t2, time):
         PlainDialog.__init__(self)
         self.data = None
         self.layout = QVBoxLayout()
@@ -43,7 +43,7 @@ class ConfirmationDialog(PlainDialog):
         self.layout.addStretch()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.kill_self)
-        self.timer.start(10000)
+        self.timer.start(time)
         start_new_thread(self.button_check, ())
         self.setLayout(self.layout)
 
