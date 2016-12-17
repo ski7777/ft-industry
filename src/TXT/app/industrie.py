@@ -57,16 +57,11 @@ class FtcGuiApplication(TouchApplication):
         confirm.exec_()
         confirm_str = confirm.get()
         print(confirm_str)
-        if confirm_str == 'YES':
-            traffic_lights.set_pattern('red', [True, True, True, True])
-            traffic_lights.set_pattern('yellow', [False, False, False, False])
-            traffic_lights.set_pattern('green', [False, False, False, False])
-            traffic_lights.set_new()
-        else:
-            traffic_lights.set_pattern('red', [True, True, True, True])
-            traffic_lights.set_pattern('yellow', [False, False, False, False])
-            traffic_lights.set_pattern('green', [False, False, False, False])
-            traffic_lights.set_new()
+        traffic_lights.set_pattern('red', [True, True, True, True])
+        traffic_lights.set_pattern('yellow', [False, False, False, False])
+        traffic_lights.set_pattern('green', [False, False, False, False])
+        traffic_lights.set_new()
+        if confirm_str != 'YES':
             logic.abort_new_pallet()
             return
         logic.new_pallet(logic.generate_palled_ID(), 'TEST')
