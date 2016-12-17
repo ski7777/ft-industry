@@ -32,16 +32,21 @@ F2 = 0
 
 
 def HRL_send(self, ea, nbr):
+    # Send pallet_ID and input/output to TX
+    # Initiate communication
     if ea == True:
         rnd = TX.start_trans(8, False)
     elif ea == False:
         rnd = TX.start_trans(5, False)
     else:
+        # Return if data is invalid
         return
     if rnd == None:
+        # retun in case of communication problems
         show_error('0x02 (TX)')
         return
     else:
+        # Convert pallet_ID to special communication
         if nbr >= 1 and nbr <= 25:
             nbr0 = 2
         elif nbr >= 26 and nbr <= 50:
@@ -74,6 +79,7 @@ def HRL_send(self, ea, nbr):
         elif nbr == 5:
             nbr2 = 14
         print('DATA TO HRL:' + str(nbr0), str(nbr1), str(nbr2))
+        # send pallet_ID to TX
         time.sleep(0.5)
         TX.add_trans(rnd, nbr0, False)
         time.sleep(0.1)
@@ -85,12 +91,15 @@ def HRL_send(self, ea, nbr):
 
 def wait_for_new_pallet():
     global F1
+    # wait for clear of F1
     while F1 != 0:
         pass
+    # set F1 to be used by a new pallet
     F1 = 1000
 
 
 def abort_new_pallet():
+    # clear F1
     global F1
     F1 = 0
 
@@ -103,8 +112,9 @@ def generate_palled_ID():
 
 
 def new_pallet(ID, order):
+    # generate new pallet with order data and set it to F1
     global F1
     F1 = ID
     pallet_stack[str(ID)] = [time.time(), [order]]
-    # TEST
+    # TEST; to add multiple new pallets
     F1 = 0

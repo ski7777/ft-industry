@@ -9,9 +9,11 @@ import time
 
 
 class ConfirmationDialog(PlainDialog):
+    # generate a confirmation dialog based on PlainDialog
 
     def __init__(self, str, t1, t2, time):
         PlainDialog.__init__(self)
+        # initiate return variable
         self.data = None
         self.layout = QVBoxLayout()
         self.layout.addStretch()
@@ -41,9 +43,11 @@ class ConfirmationDialog(PlainDialog):
         self.layout.addStretch()
         self.layout.addWidget(button_box)
         self.layout.addStretch()
+        # initialize self kill timer
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.kill_self)
         self.timer.start(time)
+        # initiate button check
         start_new_thread(self.button_check, ())
         self.setLayout(self.layout)
 
@@ -55,18 +59,22 @@ class ConfirmationDialog(PlainDialog):
     def button_check(self):
         while True:
             if main.push_button.get_state() == True:
+                # trigger t1 if button was pressed
                 self.t1_but.click()
             time.sleep(0.1)
 
     def get(self):
+        # return button data
         return(self.data)
 
     def kill_self(self):
+        # sotp timer and kill dialog
         self.timer.stop()
         self.close()
 
 
 class AboutDialog(TouchDialog):
+    # generate about dialog
 
     def __init__(self, parent):
         self.text = '<h2><font color="#fcce04">Industrieanlage</font></h2>' \
@@ -93,6 +101,7 @@ class AboutDialog(TouchDialog):
 
 
 class ErrorDialog(TouchDialog):
+    # generate error dialog
 
     def __init__(self, parent, _c):
         TouchDialog.__init__(self, "ERROR", parent)

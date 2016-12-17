@@ -5,6 +5,7 @@ from TouchStyle import *    # import PyQt, CFW Style and co.
 
 
 class ShadowButton(QToolButton):
+    # generate a nice looking button with shadow
 
     def __init__(self, iconname):
         QToolButton.__init__(self)
@@ -28,6 +29,7 @@ class ShadowButton(QToolButton):
 
 
 class PlainDialog(QDialog):
+    # show full screen dialog which the user cannot get rid of
 
     def __init__(self):
         QDialog.__init__(self)
