@@ -128,6 +128,8 @@ class NewPalletWaitDialog(PlainDialog):
     def __init__(self):
         PlainDialog.__init__(self)
         self.layout = QVBoxLayout()
+        self.lbl = QLabel('Please Wait!')
+        self.layout.addWidget(self.lbl)
         self.layout.addStretch()
         self.abort_but = QPushButton('Abort')
         self.abort_but.clicked.connect(self.abort_but_triggered)
