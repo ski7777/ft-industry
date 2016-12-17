@@ -15,7 +15,6 @@ class ConfirmationDialog(PlainDialog):
         self.data = None
         self.layout = QVBoxLayout()
         self.layout.addStretch()
-        self.truestr = t1
         lbl = QLabel(str)
         lbl.setWordWrap(True)
         lbl.setAlignment(Qt.AlignCenter)
