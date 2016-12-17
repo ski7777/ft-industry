@@ -89,15 +89,6 @@ def HRL_send(self, ea, nbr):
         TX.kill_trans(rnd)
 
 
-def wait_for_new_pallet():
-    global F1
-    # wait for clear of F1
-    while F1 != 0:
-        pass
-    # set F1 to be used by a new pallet
-    F1 = 1000
-
-
 def abort_new_pallet():
     # clear F1
     global F1

@@ -50,8 +50,17 @@ class FtcGuiApplication(TouchApplication):
         traffic_lights.set_pattern('red', [False, False, False, False])
         traffic_lights.set_pattern('yellow', [True, True, False, False])
         traffic_lights.set_new()
-        # wait for F1 free
-        logic.wait_for_new_pallet()
+        # wait for F1 free and let the user abort waiting
+        NewPalletWaitDialog().exec_()
+        # check status of F1
+        print(logic.F1)
+        if logic.F1 != 1000:
+            # abort
+            traffic_lights.set_pattern('red', [True, True, True, True])
+            traffic_lights.set_pattern('yellow', [False, False, False, False])
+            traffic_lights.set_pattern('green', [False, False, False, False])
+            traffic_lights.set_new()
+            return
         # wait for more security
         time.sleep(2)
         # show ready traffic lights

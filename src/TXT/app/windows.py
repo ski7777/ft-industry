@@ -4,6 +4,7 @@
 from _thread import start_new_thread    # import simple thread starter
 import __main__ as main                 # import main script variables
 from style import *                     # import application style lib
+import logic                            # import logic to access logic variables
 # import basic functions of python
 import time
 
@@ -119,3 +120,35 @@ class ErrorDialog(TouchDialog):
         self.vbox = QVBoxLayout()
         self.vbox.addWidget(self.txt)
         self.centralWidget.setLayout(self.vbox)
+
+
+class NewPalletWaitDialog(PlainDialog):
+    # generate a dialog in which the user can see howto add a pllaet to F1 and can abort adding a new pallet
+
+    def __init__(self):
+        PlainDialog.__init__(self)
+        self.layout = QVBoxLayout()
+        self.layout.addStretch()
+        self.abort_but = QPushButton('Abort')
+        self.abort_but.clicked.connect(self.abort_but_triggered)
+        self.layout.addWidget(self.abort_but)
+        self.layout.addStretch()
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.check_F1)
+        self.timer.start(1000)
+        self.setLayout(self.layout)
+
+    def check_F1(self):
+        print(logic.F1)
+        # wait for F1 free
+        if logic.F1 == 0:
+            # reservate F1 for new pallet
+            logic.F1 = 1000
+            # stop timer and kill dialog
+            self.timer.stop()
+            self.close()
+
+    def abort_but_triggered(self):
+        # stop timer and kill dialog
+        self.timer.stop()
+        self.close()
