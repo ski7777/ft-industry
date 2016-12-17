@@ -46,28 +46,24 @@ class FtcGuiApplication(TouchApplication):
         self.exec_()
 
     def new_order(self):
-        # show waiting traffic lights
-        traffic_lights.set_pattern('red', [False, False, False, False])
-        traffic_lights.set_pattern('yellow', [True, True, False, False])
-        traffic_lights.set_new()
         # wait for F1 free and let the user abort waiting
         NewPalletWaitDialog().exec_()
         # check status of F1
         print(logic.F1)
         if logic.F1 != 1000:
             # abort
-            traffic_lights.set_pattern('red', [True, True, True, True])
-            traffic_lights.set_pattern('yellow', [False, False, False, False])
-            traffic_lights.set_pattern('green', [False, False, False, False])
-            traffic_lights.set_new()
             return
-        # wait for more security
-        time.sleep(2)
+        # show order dialog
+        order = NewOrderDialog(self.w)
+        order.exec_()
+        order_data = order.get()
+        print(order_data)
+        if order_data == None:
+            return
         # show ready traffic lights
-        traffic_lights.set_pattern('yellow', [False, False, False, False])
+        traffic_lights.set_pattern('red', [False, False, False, False])
         traffic_lights.set_pattern('green', [True, True, True, True])
         traffic_lights.set_new()
-        # add order menu
         # ask user to satart the workflow
         confirm = ConfirmationDialog('Vorgang Starten?', 'YES', 'NO', 10000)
         confirm.exec_()

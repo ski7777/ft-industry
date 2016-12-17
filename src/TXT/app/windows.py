@@ -154,3 +154,30 @@ class NewPalletWaitDialog(PlainDialog):
         # stop timer and kill dialog
         self.timer.stop()
         self.close()
+
+
+class NewOrderDialog(TouchDialog):
+    # generate a dilog to enter the order
+
+    def __init__(self, parent):
+        TouchDialog.__init__(self, "New Order", parent)
+        self.data = None
+        self.layout = QVBoxLayout()
+        # for TEST
+        self.lbl = QLabel('Test only')
+        self.layout.addWidget(self.lbl)
+        self.layout.addStretch()
+        self.ok_but = QPushButton('Send')
+        self.ok_but.clicked.connect(self.save)
+        self.layout.addWidget(self.ok_but)
+        self.layout.addStretch()
+        self.centralWidget.setLayout(self.layout)
+
+    def save(self):
+        # save data to variable and close dialog
+        self.data = {}
+        self.close()
+
+    def get(self):
+        # return order data
+        return(self.data)
