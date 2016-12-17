@@ -13,7 +13,7 @@ class ConfirmationDialog(PlainDialog):
 
     def __init__(self, str, t1, t2, time):
         PlainDialog.__init__(self)
-        # initiate return variable
+        # initialize return variable
         self.data = None
         self.layout = QVBoxLayout()
         self.layout.addStretch()
