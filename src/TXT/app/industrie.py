@@ -59,6 +59,8 @@ class FtcGuiApplication(TouchApplication):
         order_data = order.get()
         print(order_data)
         if order_data == None:
+            # deletete F1 reservation
+            logic.F1 = 0
             return
         # show ready traffic lights
         traffic_lights.set_pattern('red', [False, False, False, False])
