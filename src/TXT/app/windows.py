@@ -129,6 +129,7 @@ class NewPalletWaitDialog(PlainDialog):
         PlainDialog.__init__(self)
         self.layout = QVBoxLayout()
         self.lbl = QLabel('Please Wait!')
+        self.lbl.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.lbl)
         self.layout.addStretch()
         self.abort_but = QPushButton('Abort')
