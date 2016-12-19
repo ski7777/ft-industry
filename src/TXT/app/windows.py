@@ -137,7 +137,7 @@ class NewPalletWaitDialog(PlainDialog):
         self.layout.addStretch()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.check_F1)
-        self.timer.start(1000)
+        self.timer.start(100)
         self.setLayout(self.layout)
 
     def check_F1(self):
