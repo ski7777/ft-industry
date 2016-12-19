@@ -175,7 +175,7 @@ class NewOrderDialog(TouchDialog):
 
     def save(self):
         # save data to variable and close dialog
-        self.data = {}
+        self.data={}
         self.close()
 
     def get(self):
