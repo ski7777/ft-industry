@@ -107,5 +107,3 @@ def new_pallet(ID, order):
     global F1
     F1 = ID
     pallet_stack[str(ID)] = [time.time(), [order]]
-    # TEST; to add multiple new pallets
-    F1 = 0
