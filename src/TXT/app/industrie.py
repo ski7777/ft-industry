@@ -81,7 +81,7 @@ class FtcGuiApplication(TouchApplication):
             # abort new pallet if start not confirmed
             logic.abort_new_pallet()
             return
-        logic.new_pallet(logic.generate_palled_ID(), 'TEST')
+        logic.new_pallet(logic.generate_palled_ID(), order_data)
 
     def show_about(self):
         # open about dialog
