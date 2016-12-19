@@ -141,7 +141,6 @@ class NewPalletWaitDialog(PlainDialog):
         self.setLayout(self.layout)
 
     def check_F1(self):
-        print(logic.F1)
         # wait for F1 free
         if logic.F1 == 0:
             # reservate F1 for new pallet
