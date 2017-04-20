@@ -3,7 +3,7 @@ name: DEV-INDUS
 category: Models
 ;html: web.py
 icon: icon.png
-desc: A App for our Indusrie Model
+desc: A app for our industry model
 exec: industrie.py
 managed: yes
 uuid: 8f06f80c-dfb1-4c13-bc3f-3c806eff1edd

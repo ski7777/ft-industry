@@ -85,7 +85,7 @@ class AboutDialog(TouchDialog):
             '2016, ski7777 and ski3989<br>' \
             '<h2><font color="#fcce04">Credits</font></h2>' \
             '<b>ftrobopy<b>' \
-            '<br>Thorsten Stuehn<br>' \
+            '<br>Torsten Stuehn<br>' \
             '<b>Robo TXT ftcommunity Firmware</b>' \
             '<br>All developers at<br>' \
             '<br><a href="https://github.com/ftCommunity/ftcommunity-TXT">https://github.com/ftCommunity/ftcommunity-TXT</a><br>' \
