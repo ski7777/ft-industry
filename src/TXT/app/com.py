@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from bash import bash as BashHandler            # import bash lib
 import ftrobopy                                 # import hardware i/o lib for fischertechnik
 from _thread import start_new_thread            # import simple thread starter
 import random                                   # import random lib
@@ -17,6 +18,7 @@ com_target_diff = 0.1
 com_wait_after_send = 5
 global com_buffers                              # initialize communication buffer
 com_buffers = {}
+bash = BashHandler()
 
 
 class push_button():

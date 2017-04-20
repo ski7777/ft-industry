@@ -7,6 +7,8 @@ from style import *                     # import application style lib
 import logic                            # import logic to access logic variables
 # import basic functions of python
 import time
+bash = logic.bash
+
 
 
 class ConfirmationDialog(PlainDialog):

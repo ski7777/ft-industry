@@ -29,6 +29,7 @@ F1 = 0
 FS = 0
 FS_POS = 0  # Front Site is 0, Rear is 1
 F2 = 0
+bash = com.bash
 
 
 def HRL_send(self, ea, nbr):

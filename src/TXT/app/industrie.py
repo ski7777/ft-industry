@@ -12,6 +12,8 @@ import os
 
 push_button = logic.push_button        # initialize the pushbutton
 traffic_lights = logic.traffic_lights  # initialize the traffic lights
+bash = logic.bash
+
 
 
 class FtcGuiApplication(TouchApplication):
