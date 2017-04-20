@@ -23,8 +23,8 @@ bash = BashHandler()
 
 class push_button():
 
-    def __init__(self):
-        self.button = txt.input(8)
+    def __init__(self, p):
+        self.button = txt.input(p)
 
     def get_state(self):
         if self.button.state() == 1:
@@ -35,10 +35,10 @@ class push_button():
 
 class traffic_lights():
 
-    def __init__(self):
-        self.red = txt.output(4)
-        self.yellow = txt.output(5)
-        self.green = txt.output(6)
+    def __init__(self, r, y, g):
+        self.red = txt.output(r)
+        self.yellow = txt.output(y)
+        self.green = txt.output(g)
         self.data = {'red': [self.red, None, [False, False, False, False]],
                      'yellow': [self.yellow, None, [False, False, False, False]],
                      'green': [self.green, None, [False, False, False, False]]}

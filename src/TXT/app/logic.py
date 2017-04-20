@@ -7,9 +7,9 @@ import com                              # import model´s communicaton lib
 import time
 
 pallet_stack = {}  # initialize pallet stack
-push_button = com.push_button()         # initialize push button
+push_button = com.push_button(8)         # initialize push button
 # initialize traffic lights
-traffic_lights = com.traffic_lights()
+traffic_lights = com.traffic_lights(4, 5, 6)
 traffic_lights.set_pattern('red', [True, True, True, True])
 traffic_lights.set_new()
 # initialize IF1 communication
