@@ -98,7 +98,7 @@ def get_target(_v, _tlist, _diff):
     for _tliastval in _tlist:
         listval = _tliastval / 10
         if (listval - _v > -0.2 and listval - _v < _diff) or (listval + _v > -0.2 and listval + _v < _diff):
-            print('target ' + str(_tliastval))
+            bash.addData("com", 'target ' + str(_tliastval))
             return(_tliastval)
 
 
@@ -119,10 +119,10 @@ def com_thread(_i, _ident):
     while True:
         uuid = get_target(recieve(_i, analog_threshold), com_values, com_target_diff)
         command = get_target(recieve(_i, analog_threshold), com_values, com_target_diff)
-        print('Adding to ' + str(_ident) + ' uuid ' + str(uuid) + ' command ' + str(command))
+        bash.addData("com", 'Adding to ' + str(_ident) + ' uuid ' + str(uuid) + ' command ' + str(command))
         add_list = [uuid, command]
         globals()['stack_list_' + str(_ident)].append(add_list)
-        print('reading stack_list_' + str(_ident) + ': ' + str(globals()['stack_list_' + str(_ident)]))
+        bash.addData("com", 'reading stack_list_' + str(_ident) + ': ' + str(globals()['stack_list_' + str(_ident)]))
 
 
 class com_stack():
@@ -138,28 +138,28 @@ class com_stack():
                 com_buffers[x] = []
                 break
         self.ident = copy.deepcopy(x)
-        print('Stack Ident: ' + str(x))
-        print('SETTING stack_list_' + str(self.ident))
+        bash.addData("com", 'Stack Ident: ' + str(x))
+        bash.addData("com", 'SETTING stack_list_' + str(self.ident))
         globals()['stack_list_' + str(self.ident)] = []
-        print('reading stack_list_' + str(self.ident) + ' : ' + str(globals()['stack_list_' + str(self.ident)]))
+        bash.addData("com", 'reading stack_list_' + str(self.ident) + ' : ' + str(globals()['stack_list_' + str(self.ident)]))
 
     def setio(self, _i, _o):
-        print('Setting IO: ', str(_i), str(_o))
+        bash.addData("com", 'Setting IO: ' + str(_i) + str(_o))
         self.input = txt.trailfollower(_i)
         self.output = txt.output(_o)
 
     def start_trans(self, _d, _reqa):
         self.values_to_chose = list(com_values)
         for x in self.open_trans:
-            print('Chosen RND: ' + str(x))
+            bash.addData("com", 'Chosen RND: ' + str(x))
             self.values_to_chose.remove(x)
-        print('Free RNDs: ' + str(self.values_to_chose))
+        bash.addData("com", 'Free RNDs: ' + str(self.values_to_chose))
         if len(self.values_to_chose) == 0:
-            print('NO MORE VAL')
+            bash.addData("com", 'NO MORE VAL')
             return
         new_rnd = random.choice(self.values_to_chose)
         self.open_trans.append(new_rnd)
-        print('Sending data ' + str(_d) + ' to uuid ' + str(new_rnd))
+        bash.addData("com", 'Sending data ' + str(_d) + ' to uuid ' + str(new_rnd))
         send_set(self.output, com_speed, [new_rnd, _d])
         sent_time = time.time()
         if _reqa == True:
@@ -168,18 +168,18 @@ class com_stack():
                     if search_item[0] == new_rnd:
                         if search_item[1] == 2:
                             globals()['stack_list_' + str(self.ident)].remove(search_item)
-                            print('Success')
+                            bash.addData("com", 'Success')
                             return(new_rnd)
-            print('ERROR')
+            bash.addData("com", 'ERROR')
             return
         else:
-            print('Sended without requested answer')
+            bash.addData("com", 'Sended without requested answer')
             return(new_rnd)
 
     def add_trans(self, _uuid, _d, _reqa):
         if not _uuid in self.open_trans:
             return
-        print('Adding data ' + str(_d) + ' to uuid ' + str(_uuid))
+        bash.addData("com", 'Adding data ' + str(_d) + ' to uuid ' + str(_uuid))
         send_set(self.output, com_speed, [_uuid, _d])
         sent_time = time.time()
         if _reqa == True:
@@ -188,12 +188,12 @@ class com_stack():
                     if search_item[0] == _uuid:
                         if search_item[1] == 2:
                             globals()['stack_list_' + str(self.ident)].remove(search_item)
-                            print('Success')
+                            bash.addData("com", 'Success')
                             return
-            print('ERROR')
+            bash.addData("com", 'ERROR')
             return
         else:
-            print('Sended without requested answer')
+            bash.addData("com", 'Sended without requested answer')
             return
 
     def get_answers(self, _uuid):
@@ -208,23 +208,23 @@ class com_stack():
     def del_answers(self, _uuid):
         if not _uuid in self.open_trans:
             return
-        print('Deleting answers of uuid ' + str(_uuid))
+        bash.addData("com", 'Deleting answers of uuid ' + str(_uuid))
         for search_item in globals()['stack_list_' + str(self.ident)]:
             if search_item[0] == _uuid:
                 globals()['stack_list_' + str(self.ident)].remove(search_item)
         return
 
     def kill_trans(self, _uuid):
-        print('Killing all data for uuid ' + str(_uuid))
+        bash.addData("com", 'Killing all data for uuid ' + str(_uuid))
         self.open_trans.remove(_uuid)
         for search_item in globals()['stack_list_' + str(self.ident)]:
             if search_item[0] == _uuid:
                 globals()['stack_list_' + str(self.ident)].remove(search_item)
         self.values_to_chose = list(com_values)
         for x in self.open_trans:
-            print('Chosen RND: ' + str(x))
+            bash.addData("com", 'Chosen RND: ' + str(x))
             self.values_to_chose.remove(x)
-        print('Free RNDs: ' + str(self.values_to_chose))
+        bash.addData("com", 'Free RNDs: ' + str(self.values_to_chose))
 
     def start_recieving(self):
         start_new_thread(com_thread, (self.input, self.ident,))
