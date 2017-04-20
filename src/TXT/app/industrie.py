@@ -20,7 +20,7 @@ class FtcGuiApplication(TouchApplication):
 
     def __init__(self, args):
         TouchApplication.__init__(self, args)
-        print('-----READY-----')
+        bash.addData("info", "READY")
         # create the empty main window
         self.w = TouchWindow("Industrie")
         menu = self.w.addMenu()
@@ -60,10 +60,10 @@ class FtcGuiApplication(TouchApplication):
         order = NewOrderDialog(self.w)
         order.exec_()
         order_data = order.get()
-        print(order_data)
+        bash.addData("info", order_data)
         if order_data == None:
             # deletete F1 reservation
-            logic.F1 = 0
+            logic.abort_new_pallet()
             return
         # show ready traffic lights
         traffic_lights.set_pattern('red', [False, False, False, False])
@@ -74,7 +74,7 @@ class FtcGuiApplication(TouchApplication):
         confirm.exec_()
         # get values from confirmation dialog
         confirm_str = confirm.get()
-        print(confirm_str)
+        bash.addData("info", confirm_str)
         # show traffic lights stop
         traffic_lights.set_pattern('red', [True, True, True, True])
         traffic_lights.set_pattern('yellow', [False, False, False, False])
