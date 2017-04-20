@@ -1,10 +1,11 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from _thread import start_new_thread    # import simple thread starter
 import com                              # import model´s communicaton lib
+import json                             # import json lib for routing map
 # import basic functions of python
 import time
+from pathlib import Path
 
 pallet_stack = {}  # initialize pallet stack
 push_button = com.push_button(8)         # initialize push button
@@ -20,15 +21,9 @@ IF1.start_recieving()
 TX = com.com_stack()
 TX.setio(2, 2)
 TX.start_recieving()
-# initialize model´s stations´ variables
-global F1
-global FS
-global FS_POS
-global F2
-F1 = 0
-FS = 0
-FS_POS = 0  # Front Site is 0, Rear is 1
-F2 = 0
+# read station data from file
+global model_map
+model_map = json.loads(Path("stations.json").read_text())
 bash = com.bash
 
 
@@ -92,8 +87,7 @@ def HRL_send(self, ea, nbr):
 
 def abort_new_pallet():
     # clear F1
-    global F1
-    F1 = 0
+    model_map["stamp"]["pallet"] = 0
 
 
 def generate_palled_ID():
@@ -105,8 +99,75 @@ def generate_palled_ID():
 
 def new_pallet(ID, order):
     # generate new pallet with order data and set it to F1
-    global F1
-    F1 = ID
-    pallet_stack[str(ID)] = [time.time(), [order]]
-    # TEST; print out all pallets
-    print(pallet_stack)
+    model_map["stamp"]["pallet"] = ID
+    #state:
+    #0: stuck
+    #1: moving
+    pallet_stack[str(ID)] = {"time": time.time(), "data": order, "state": 0, "route": []}
+
+
+def listPalletsByTime():
+    data = {}
+    for x, y in pallet_stack.items():
+        data[y["time"]] = x
+    ret_data = []
+    for x in sorted(data):
+        ret_data.append(data[x])
+    return(ret_data)
+
+
+def locatePallet(ID):
+    for x, y in model_map.items():
+        if y["pallet"] == int(ID):
+            return(x)
+    return(None)
+
+
+def RoutePlanner(ID, dest):
+    start = locatePallet(ID)
+    route = []
+    # The carriage is the center of the model so we have always a route which constits of two parts
+    # build a route to the carriage
+    pos = start
+    while pos != "carriage":
+        route.append(pos)
+        pos = model_map[pos]["to_carriage"]
+    route.pop(0)
+    # no we reached the carriage
+    # build the route from the carriage to the destination
+    _rte = []
+    pos = dest
+    while pos != "carriage":
+        _rte.append(pos)
+        pos = model_map[pos]["to_carriage"]
+    _rte.reverse()
+    return(route + ["carriage"] + _rte)
+
+
+def logic_thread():
+    while True:
+        work_order = listPalletsByTime()  # calculate work order
+        # print on bash
+        bash.deleteData("logic")
+        bash.addData("logic", "Work Order: " + str(work_order))
+        bash.addData("logic", "Locations:")
+        bash.addData("logic", json.dumps(model_map, indent=4, sort_keys=True))
+        # print locations for each pallet
+        if work_order != []:
+            bash.addData("logic", "Locations:")
+            for x in work_order:
+                bash.addData("logic", x + ": " + locatePallet(x) + ", " + str(pallet_stack[x]["route"]))
+        # calculate routes (to HRL) for each pallet
+        for x in work_order:
+            if pallet_stack[x]["route"] == []:
+                pallet_stack[x]["route"] = RoutePlanner(x, "scanner")
+                free = True
+                for y in pallet_stack[x]["route"]:
+                    if model_map[y]["pallet"] != 0:
+                        free = False
+                if free:
+                    for y in pallet_stack[x]["route"]:
+                        model_map[y]["pallet"] = 2000
+                else:
+                    pallet_stack[x]["route"] = []
+        time.sleep(0.1)

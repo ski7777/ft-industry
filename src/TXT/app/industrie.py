@@ -12,6 +12,7 @@ import os
 
 push_button = logic.push_button        # initialize the pushbutton
 traffic_lights = logic.traffic_lights  # initialize the traffic lights
+start_new_thread(logic.logic_thread, ())  # start logic thread
 bash = logic.bash
 
 
@@ -52,8 +53,8 @@ class FtcGuiApplication(TouchApplication):
         # wait for F1 free and let the user abort waiting
         NewPalletWaitDialog().exec_()
         # check status of F1
-        print(logic.F1)
-        if logic.F1 != 1000:
+        bash.addData("info", logic.model_map["stamp"]["pallet"])
+        if logic.model_map["stamp"]["pallet"] != 1000:
             # abort
             return
         # show order dialog

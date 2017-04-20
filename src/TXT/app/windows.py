@@ -145,9 +145,9 @@ class NewPalletWaitDialog(PlainDialog):
 
     def check_F1(self):
         # wait for F1 free
-        if logic.F1 == 0:
+        if logic.model_map["stamp"]["pallet"] == 0:
             # reservate F1 for new pallet
-            logic.F1 = 1000
+            logic.model_map["stamp"]["pallet"] = 1000
             # stop timer and kill dialog
             self.timer.stop()
             self.close()

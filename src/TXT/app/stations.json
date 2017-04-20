@@ -1,0 +1,15 @@
+{
+  "stamp": {
+    "to_carriage": "carriage",
+    "pallet": 0
+  },
+  "carriage": {
+    "pallet": 0,
+    "pos": 0,
+    "_comment": "Front Site is 0, Rear is 1"
+  },
+  "scanner": {
+    "to_carriage": "carriage",
+    "pallet": 0
+  }
+}
