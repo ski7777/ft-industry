@@ -79,7 +79,7 @@ def HRL_send(self, ea, nbr):
             nbr2 = 11
         elif nbr == 5:
             nbr2 = 14
-        print('DATA TO HRL:' + str(nbr0), str(nbr1), str(nbr2))
+        bash.addData("logic", 'DATA TO HRL:' + str(nbr0), str(nbr1), str(nbr2))
         # send pallet_ID to TX
         time.sleep(0.5)
         TX.add_trans(rnd, nbr0, False)
