@@ -4,6 +4,7 @@
 from TouchStyle import *                # import PyQt, CFW Style and co.
 from windows import *                   # import application´s windows
 import logic                            # import the hardware logic
+import signal                           # import signal handling
 # import basic functions of python
 import time
 import sys
@@ -94,5 +95,5 @@ class FtcGuiApplication(TouchApplication):
         dialog.exec_()
 
 if __name__ == "__main__":
-    # start main application
-    FtcGuiApplication(sys.argv)
+    signal.signal(signal.SIGINT, signal.SIG_DFL)  # kill applictaion on sigint
+    FtcGuiApplication(sys.argv)  # start main application
