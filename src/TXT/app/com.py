@@ -86,7 +86,6 @@ def get_digital(value, gd_threshold):
 def recieve(_i, _threshold):
     while get_digital(_i.voltage(), _threshold) == False:
         time.sleep(0.05)
-    bash.addData("com", 'recv')
     start = time.time()
     while get_digital(_i.voltage(), _threshold) == True:
         time.sleep(0.05)

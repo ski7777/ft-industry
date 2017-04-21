@@ -3,6 +3,7 @@
 
 import com                              # import model´s communicaton lib
 import json                             # import json lib for routing map
+from _thread import start_new_thread    # import simple thread starter
 # import basic functions of python
 import time
 from pathlib import Path
@@ -100,9 +101,9 @@ def generate_palled_ID():
 def new_pallet(ID, order):
     # generate new pallet with order data and set it to F1
     model_map["stamp"]["pallet"] = ID
-    #state:
-    #0: stuck
-    #1: moving
+    # state:
+    # 0: stuck
+    # 1: moving
     pallet_stack[str(ID)] = {"time": time.time(), "data": order, "state": 0, "route": []}
 
 
@@ -144,6 +145,36 @@ def RoutePlanner(ID, dest):
     return(route + ["carriage"] + _rte)
 
 
+def movePallet(ID):
+    # get data
+    dep = locatePallet(ID)
+    dest = pallet_stack[ID]["route"][0]
+
+    pallet_stack[ID]["state"] = 1  # set state to moving
+    calls = {
+        "stamp": {
+            "carriage": [IF1, 14, True]
+        },
+        "carriage": {
+            "scanner": [IF1, 11, True]
+        },
+        "scanner": {}}
+    try:
+        cmd = calls[dep][dest]  # get command ID
+    except:
+        bash.addData("info", "No route!")
+        print(dep)
+        print(dest)
+        return
+    bash.addData("info", "Route: " + dep + " -> " + dest + " CMD: " + str(cmd))
+    if cmd[0].start_trans(cmd[1], cmd[2]) == None:
+        bash.addData("info", "ERROR sending data")
+    model_map[dep]["pallet"] = 0
+    model_map[dest]["pallet"] = int(ID)
+    pallet_stack[ID]["route"].pop(0)
+    pallet_stack[ID]["state"] = 0
+
+
 def logic_thread():
     while True:
         work_order = listPalletsByTime()  # calculate work order
@@ -156,18 +187,28 @@ def logic_thread():
         if work_order != []:
             bash.addData("logic", "Locations:")
             for x in work_order:
-                bash.addData("logic", x + ": " + locatePallet(x) + ", " + str(pallet_stack[x]["route"]))
+                try:
+                    bash.addData("logic", x + ": " + locatePallet(x) + ", " + str(pallet_stack[x]["route"]))
+                except:
+                    pass
         # calculate routes (to HRL) for each pallet
         for x in work_order:
             if pallet_stack[x]["route"] == []:
                 pallet_stack[x]["route"] = RoutePlanner(x, "scanner")
+                bash.addData("info", pallet_stack[x]["route"])
                 free = True
                 for y in pallet_stack[x]["route"]:
                     if model_map[y]["pallet"] != 0:
                         free = False
+                        bash.addData("info", y)
                 if free:
                     for y in pallet_stack[x]["route"]:
                         model_map[y]["pallet"] = 2000
                 else:
                     pallet_stack[x]["route"] = []
+        # move pallets to their destination
+        for x in work_order:
+            # check whether pallet is movaeable
+            if pallet_stack[x]["route"] != [] and pallet_stack[x]["state"] == 0:
+                start_new_thread(movePallet, (x,))
         time.sleep(0.1)
