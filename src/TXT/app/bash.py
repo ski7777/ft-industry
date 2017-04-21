@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from _thread import start_new_thread    # import simple thread starter
-
+import tty
+from select import select
+import termios
 # import basic functions of python
 import os
+import sys
 import time
 
 
@@ -16,11 +19,13 @@ class bash():
         # name is shown on bash
         # data is a list of lines
         # max defines how much lines should be printed, 0 = all, n = n lines from the end
-        self.content = {"logic": {"name": "Logic", "data": [], "max": 0},
-                        "info": {"name": "Info", "data": [], "max": 10},
-                        "com": {"name": "COM", "data": [], "max": 15}}
+        # key is the toggle key
+        # state sets on/off by default
+        self.content = {"logic": {"name": "Logic", "data": [], "max": 0, "key": "l", "state": True},
+                        "info": {"name": "Info", "data": [], "max": 10, "key": "i", "state": True},
+                        "com": {"name": "COM", "data": [], "max": 15, "key": "c", "state": True}}
         self.content_order = ["info", "com", "logic"]
-        self.rows, self.columns= self.getSize()  # calculate size of bash
+        self.rows, self.columns = self.getSize()  # calculate size of bash
         # init variables to save the content
         self.out = ""
         self.out_old = ""
@@ -37,7 +42,7 @@ class bash():
     def printline(self, line):
         # print line on bash (write it into string)
         # check whther there is enough space
-        if self.rows <= 0:
+        if self.rows <= 1:
             return
         self.out = self.out + "\n" + line[:self.columns]  # write line to string
         self.rows -= 1  # decrease row count
@@ -64,36 +69,38 @@ class bash():
         self.printline(line)  # print line
 
     def output(self):
-        self.out = ""#remove all content
-        rows, self.columns= self.getSize()# calculate size of bash
-        self.rows = rows#save amount of rows
+        self.out = ""  # remove all content
+        rows, self.columns = self.getSize()  # calculate size of bash
+        self.rows = rows  # save amount of rows
 
-        #some default printing
+        # some default printing
         self.printCenter("Status", "-")
         self.printline("Size: " + str(self.columns) + " x " + str(rows))
-        #print each category
+        # print each category
         for c in self.content_order:
             cat = self.content[c]
-            self.printCenter(cat["name"], "-")#primt category name
-            m = cat["max"]#get max line for this category
-            #get all lines in case of infinitive
+            if not cat["state"]:
+                continue
+            self.printCenter(cat["name"], "-")  # primt category name
+            m = cat["max"]  # get max line for this category
+            # get all lines in case of infinitive
             if m == 0:
                 d = cat["data"]
-            #get x lines
+            # get x lines
             else:
                 d = cat["data"][-m:]
-            #print each line
+            # print each line
             for line in d:
                 self.printline(line)
-            self.printline("")#print end line
+            self.printline("")  # print end line
 
-        self.fill_empty()#fill empty lines
+        self.fill_empty()  # fill empty lines
 
-        self.rows = rows#save amount of rows
-        #check whther output changed
+        self.rows = rows  # save amount of rows
+        # check whther output changed
         if self.out != self.out_old:
-            print(self.out)#print output
-            self.out_old = self.out#save current content as old data
+            print(self.out)  # print output
+            self.out_old = self.out  # save current content as old data
 
     def fill_empty(self):
         # fill empty rows
@@ -115,4 +122,27 @@ class bash():
         time.sleep(3)  # waint some time
         while True:
             self.output()  # print on bash
-            time.sleep(0.1)  # wait
+            char = getChar()
+            if char == "q":
+                sys.exit(1)
+            for cat in self.content.keys():
+                if char == self.content[cat]["key"]:
+                    if self.content[cat]["state"]:
+                        self.content[cat]["state"] = False
+                    else:
+                        self.content[cat]["state"] = True
+
+
+def getChar():
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        [i, o, e] = select([sys.stdin.fileno()], [], [], 0.4)
+        if i:
+            ch = sys.stdin.read(1)
+        else:
+            ch = None
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
