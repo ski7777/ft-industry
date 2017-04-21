@@ -84,10 +84,11 @@ def get_digital(value, gd_threshold):
 
 
 def recieve(_i, _threshold):
-    while get_digital(_i.state(), _threshold) == False:
+    while get_digital(_i.voltage(), _threshold) == False:
         time.sleep(0.05)
+    bash.addData("com", 'recv')
     start = time.time()
-    while get_digital(_i.state(), _threshold) == True:
+    while get_digital(_i.voltage(), _threshold) == True:
         time.sleep(0.05)
     end = time.time()
     diff = end - start
@@ -145,7 +146,7 @@ class com_stack():
 
     def setio(self, _i, _o):
         bash.addData("com", 'Setting IO: ' + str(_i) + str(_o))
-        self.input = txt.trailfollower(_i)
+        self.input = txt.voltage(_i)
         self.output = txt.output(_o)
 
     def start_trans(self, _d, _reqa):
