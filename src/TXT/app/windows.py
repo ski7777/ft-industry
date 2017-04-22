@@ -158,27 +158,56 @@ class NewPalletWaitDialog(PlainDialog):
         self.close()
 
 
+class NewOrderList(QListWidget):
+    # generate a properties list
+    # initialize properties open signal
+    property_open = pyqtSignal(str)
+
+    def __init__(self, items):
+        super(NewOrderList, self).__init__(None)
+        self.items = items
+        for name, data in self.items.items():
+            item = QListWidgetItem(name)
+            item.setData(Qt.UserRole, name)
+            self.addItem(item)
+        self.itemClicked.connect(self.click)
+
+    def click(self, item):
+        print('LIST: ' + str(item.data(Qt.UserRole)))
+        self.property_open[str].emit(item.data(Qt.UserRole))
+
+
 class NewOrderDialog(TouchDialog):
     # generate a dilog to enter the order
 
     def __init__(self, parent):
         TouchDialog.__init__(self, "New Order", parent)
+        self.parent = parent
         self.data = None
+        self.items = {'Stamping': AboutDialog}
+        # generate main layout
         self.layout = QVBoxLayout()
-        # for TEST
-        self.lbl = QLabel('Test only')
-        self.layout.addWidget(self.lbl)
-        self.layout.addStretch()
-        self.ok_but = QPushButton('Send')
+        # add properties list
+        self.list = NewOrderList(self.items)
+        self.list.property_open[str].connect(self.properties)
+        self.layout.addWidget(self.list)
+        # add send button
+        self.ok_but = QPushButton('Save')
         self.ok_but.clicked.connect(self.save)
         self.layout.addWidget(self.ok_but)
-        self.layout.addStretch()
+        # set central widget
         self.centralWidget.setLayout(self.layout)
+        # print(sorted(dir(self.centralWidget)))
 
     def save(self):
         # save data to variable and close dialog
-        self.data={}
+        self.data = {}
         self.close()
+
+    def properties(self, name):
+        bash.addData("info", name)
+        diag = self.items[name](self)
+        diag.exec_()
 
     def get(self):
         # return order data
