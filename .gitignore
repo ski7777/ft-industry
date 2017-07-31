@@ -1,3 +1,6 @@
 src/TX/*.csv
 src/TX/*.xls
 src/TX/*.xlsx
+*.xlsx#
+*.tmp
+~$*.xls*
