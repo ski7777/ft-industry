@@ -13,6 +13,7 @@ Sled = IF0.Sled
 
 TXT0 = TXT0Mod.Interface()
 TrafficLights = TXT0.TrafficLights
+HRL = TXT0.HRL
 
 Sled.initialize(home=False)
 F1.initialize()

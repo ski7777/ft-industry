@@ -6,6 +6,7 @@ from ftrobopy import ftrobopy
 import time
 from .TrafficLights import TrafficLights
 from .com import com_stack as ComStack
+from .HRL import HRL
 
 
 class Interface():
@@ -17,3 +18,4 @@ class Interface():
         self.TX = ComStack(self.IF)
         self.TX.setio(2, 2)
         self.TX.start_recieving()
+        self.HRL = HRL(self.TX)
