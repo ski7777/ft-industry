@@ -66,7 +66,7 @@ class com_stack():
 
     def __init__(self, txt):
         self.open_trans = []
-        self.txt=txt
+        self.txt = txt
         x = 0
         global com_buffers
         while True:

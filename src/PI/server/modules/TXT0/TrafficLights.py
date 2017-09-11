@@ -5,6 +5,7 @@
 import threading
 import time
 
+
 class TrafficLights(threading.Thread):
 
     def __init__(self, txt, r, y, g):

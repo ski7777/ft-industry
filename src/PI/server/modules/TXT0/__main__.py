@@ -3,6 +3,7 @@
 #
 
 from ftrobopy import ftrobopy
+import time
 from .TrafficLights import TrafficLights
 from .com import com_stack as ComStack
 
