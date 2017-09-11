@@ -4,6 +4,7 @@
 
 from ftrobopy import ftrobopy
 from .TrafficLights import TrafficLights
+from .com import com_stack as ComStack
 
 
 class Interface():
@@ -12,3 +13,6 @@ class Interface():
         self.TrafficLights = TrafficLights(self.IF, 4, 5, 6)
         self.TrafficLights.set_pattern('red', [True, True, True, True])
         self.TrafficLights.set_new()
+        self.TX = ComStack(self.IF)
+        self.TX.setio(2, 2)
+        self.TX.start_recieving()
