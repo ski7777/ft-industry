@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-from _thread import start_new_thread            # import simple thread starter
-import random                                   # import random lib
-import copy                                     # import lib for copying data structures
-# import basic functions of python
+import copy  # import lib for copying data structures
+import random  # import random lib
 import time
+
+from _thread import start_new_thread  # import simple thread starter
 
 analog_threshold = 1500
 com_speed = 0.1

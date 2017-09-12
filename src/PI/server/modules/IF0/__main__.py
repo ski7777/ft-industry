@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 #
 
-import robointerface as RI
 import time
+
+import robointerface as RI
 
 
 class Interface():

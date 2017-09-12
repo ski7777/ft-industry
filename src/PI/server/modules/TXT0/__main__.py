@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 #
 
-from ftrobopy import ftrobopy
 import time
-from .TrafficLights import TrafficLights
+
+from ftrobopy import ftrobopy
+
 from .com import com_stack as ComStack
 from .HRL import HRL
+from .TrafficLights import TrafficLights
 
 
 class Interface():
