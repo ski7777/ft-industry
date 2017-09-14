@@ -3,9 +3,8 @@
 #
 import copy  # import lib for copying data structures
 import random  # import random lib
+import threading
 import time
-
-from _thread import start_new_thread  # import simple thread starter
 
 analog_threshold = 1500
 com_speed = 0.1
@@ -53,18 +52,10 @@ def send_set(o, speed, d):
         time.sleep(speed)
 
 
-def com_thread(_i, _ident):
-    #x = 0
-    while True:
-        uuid = get_target(recieve(_i, analog_threshold), com_values, com_target_diff)
-        command = get_target(recieve(_i, analog_threshold), com_values, com_target_diff)
-        add_list = [uuid, command]
-        globals()['stack_list_' + str(_ident)].append(add_list)
-
-
-class com_stack():
+class com_stack(threading.Thread):
 
     def __init__(self, txt):
+        threading.Thread.__init__(self)
         self.open_trans = []
         self.txt = txt
         x = 0
@@ -145,5 +136,13 @@ class com_stack():
         for x in self.open_trans:
             self.values_to_chose.remove(x)
 
+    def run(self):
+        #x = 0
+        while True:
+            uuid = get_target(recieve(self.input, analog_threshold), com_values, com_target_diff)
+            command = get_target(recieve(self.input, analog_threshold), com_values, com_target_diff)
+            add_list = [uuid, command]
+            globals()['stack_list_' + str(self.id)].append(add_list)
+
     def start_recieving(self):
-        start_new_thread(com_thread, (self.input, self.ident,))
+        self.start()
