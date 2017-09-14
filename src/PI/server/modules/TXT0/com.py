@@ -75,8 +75,8 @@ class com_stack():
             else:
                 com_buffers[x] = []
                 break
-        self.ident = copy.deepcopy(x)
-        globals()['stack_list_' + str(self.ident)] = []
+        self.id = x
+        globals()['stack_list_' + str(self.id)] = []
 
     def setio(self, _i, _o):
         self.input = self.txt.voltage(_i)
@@ -94,10 +94,10 @@ class com_stack():
         sent_time = time.time()
         if _reqa == True:
             while sent_time + com_wait_after_send > time.time():
-                for search_item in globals()['stack_list_' + str(self.ident)]:
+                for search_item in globals()['stack_list_' + str(self.id)]:
                     if search_item[0] == new_rnd:
                         if search_item[1] == 2:
-                            globals()['stack_list_' + str(self.ident)].remove(search_item)
+                            globals()['stack_list_' + str(self.id)].remove(search_item)
                             return(new_rnd)
             return
         else:
@@ -110,10 +110,10 @@ class com_stack():
         sent_time = time.time()
         if _reqa == True:
             while sent_time + com_wait_after_send > time.time():
-                for search_item in globals()['stack_list_' + str(self.ident)]:
+                for search_item in globals()['stack_list_' + str(self.id)]:
                     if search_item[0] == _uuid:
                         if search_item[1] == 2:
-                            globals()['stack_list_' + str(self.ident)].remove(search_item)
+                            globals()['stack_list_' + str(self.id)].remove(search_item)
                             return
             return
         else:
@@ -123,7 +123,7 @@ class com_stack():
         if not _uuid in self.open_trans:
             return
         answers = []
-        for search_item in globals()['stack_list_' + str(self.ident)]:
+        for search_item in globals()['stack_list_' + str(self.id)]:
             if search_item[0] == _uuid:
                 answers.append(search_item)
         return(answers)
@@ -131,16 +131,16 @@ class com_stack():
     def del_answers(self, _uuid):
         if not _uuid in self.open_trans:
             return
-        for search_item in globals()['stack_list_' + str(self.ident)]:
+        for search_item in globals()['stack_list_' + str(self.id)]:
             if search_item[0] == _uuid:
-                globals()['stack_list_' + str(self.ident)].remove(search_item)
+                globals()['stack_list_' + str(self.id)].remove(search_item)
         return
 
     def kill_trans(self, _uuid):
         self.open_trans.remove(_uuid)
-        for search_item in globals()['stack_list_' + str(self.ident)]:
+        for search_item in globals()['stack_list_' + str(self.id)]:
             if search_item[0] == _uuid:
-                globals()['stack_list_' + str(self.ident)].remove(search_item)
+                globals()['stack_list_' + str(self.id)].remove(search_item)
         self.values_to_chose = list(com_values)
         for x in self.open_trans:
             self.values_to_chose.remove(x)
