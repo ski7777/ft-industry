@@ -56,6 +56,7 @@ class com_stack(threading.Thread):
 
     def __init__(self, txt):
         threading.Thread.__init__(self)
+        self.daemon = True
         self.open_trans = []
         self.txt = txt
         x = 0

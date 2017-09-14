@@ -10,6 +10,7 @@ class TrafficLights(threading.Thread):
 
     def __init__(self, txt, r, y, g):
         threading.Thread.__init__(self)
+        self.daemon = True
         self.red = txt.output(r)
         self.yellow = txt.output(y)
         self.green = txt.output(g)
