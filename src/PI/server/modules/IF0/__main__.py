@@ -11,7 +11,7 @@ class Interface():
     def __init__(self):
         self.IF = RI.RoboInterface()
         self.F1 = F1(self.IF)
-        self.F2 = F2(4, 5, self.IF)
+        self.F2 = F2(self.IF)
         self.Sled = Sled(self.IF)
         self.Stamp = Stamp(9, self.IF)
 
@@ -153,5 +153,6 @@ class F1(Belt):
 
 
 class F2(Belt):
-    def __init__(self, Mot, PhotoInit, IF):
-        super().__init__(Mot, PhotoInit, IF)
+    def __init__(self, IF):
+        super().__init__(4, 5, IF)
+        self.PhotoEnd = 6
