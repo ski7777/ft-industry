@@ -9,10 +9,12 @@ class HRL():
     def __init__(self, com):
         self.com = com
         self.isInit = False
-        self.Belt = None
+        self.Sled = None
+        self.F2 = None
 
-    def initialize(self, Belt):
-        self.Belt = Belt
+    def initialize(self, Sled, F2):
+        self.Sled = Sled
+        self.F2 = F2
         # TODO: Add init command or wait for fttxpy ;-)
         # send(...)
         time.sleep(2)
@@ -27,11 +29,20 @@ class HRL():
         assert(pos == pallet.POSF2)
         self.send(True, pallet.id)
         pallet.pos = pallet.POSHRL
+        time.sleep(55)
+        # TODO: Add finished button or wait for fttxpy ;-)
 
     def moveOut(self, pallet):
         pos = pallet.pos
         assert(pos == pallet.POSHRL)
         self.send(False, pallet.id)
+        self.Sled.goPosBelt(self.Sled.POSBELTHANDOVER)
+        self.F2.goFromHRL()
+        self.Sled.goPosBelt(self.Sled.POSBELTHANDOVER)
+        self.F2.waitHRLPallet()
+        time.sleep(15)
+        self.F2.moveRightTime(10)
+        self.F2.initialize()
         pallet.pos = pallet.POSF2
 
     def send(self, ea, nbr):
