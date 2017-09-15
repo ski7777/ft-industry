@@ -83,6 +83,11 @@ class Sled():
                 self.IF.SetMotor(self.MotBelt, 's')
                 self.curPosBelt = self.POSBELTHANDOVER
 
+    def moveLeft(self):
+        self.IF.SetMotor(self.MotBelt, 'l')
+        time.sleep(4)
+        self.goPosBelt(self.POSBELTHOME)
+
 
 class Belt():
     def __init__(self, Mot, PhotoInit, IF):
@@ -151,8 +156,36 @@ class F1(Belt):
                         break
             self.curPosBelt = self.POSBELTTAMP
 
+    def moveForward(self):
+        self.IF.SetMotor(self.Mot, 'l', 3)
+        time.sleep(0.5)
+        while True:
+            if not self.IF.Digital(self.PhotoInit):
+                time.sleep(0.01)
+                if not self.IF.Digital(self.PhotoInit):
+                    time.sleep(0.5)
+                    break
+        while True:
+            if not self.IF.Digital(self.PhotoInit):
+                time.sleep(0.01)
+                if not self.IF.Digital(self.PhotoInit):
+                    time.sleep(0.1)
+                    self.IF.SetMotor(self.Mot, 's')
+                    break
+        self.curPosBelt = self.POSBELTHOME
+
 
 class F2(Belt):
     def __init__(self, IF):
         super().__init__(4, 5, IF)
         self.PhotoEnd = 6
+    def moveLeft(self):
+        self.IF.SetMotor(self.Mot, 'l', 3)
+        while True:
+            if not self.IF.Digital(self.PhotoEnd):
+                time.sleep(0.01)
+                if not self.IF.Digital(self.PhotoEnd):
+                    time.sleep(0.1)
+                    self.IF.SetMotor(self.Mot, 's')
+                    break
+        self.initialize()
