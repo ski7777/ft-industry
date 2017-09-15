@@ -43,10 +43,32 @@ while True:
             break
     except:
         break
-    print("Put the new pallet on the belt and press any key to continue!")
-    input()
+    input("Put the new pallet on the belt and press any key to continue!")
     palletStack.append(Palllet(findPalletID(palletStack)))
     currentPallet = palletStack[-1]
+    Sled.goPosBelt(Sled.POSBELTHANDOVER)
+    F1.moveLeft()
+    Sled.moveLeft()
+    F2.moveLeft()
+    currentPallet.pos = currentPallet.POSF2
+    HRL.moveIn(currentPallet)
+print("Starting Loop")
+while True:
+    currentPallets = {}
+    for p in palletStack:
+        currentPallets[p.lastStamp] = p
+    currentPallet = currentPallets[sorted(currentPallets)[0]]
+    HRL.moveOut(currentPallet)
+    F1.goPos(F1.POSBELTHOME)
+    Sled.moveRight()
+    F1.moveRightTime(2)
+    Sled.goPosBelt(Sled.POSBELTHOME)
+    for _ in range(2):
+        Stamp.goPos(Stamp.POSSTAMPSOWN)
+        time.sleep(0.5)
+        Stamp.goPos(Stamp.POSSTAMPUP)
+        time.sleep(0.3)
+    currentPallet.lastStamp = time.time()
     Sled.goPosBelt(Sled.POSBELTHANDOVER)
     F1.moveLeft()
     Sled.moveLeft()
