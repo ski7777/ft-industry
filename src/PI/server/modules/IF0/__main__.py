@@ -201,3 +201,14 @@ class F2(Belt):
                     self.IF.SetMotor(self.Mot, 's')
                     break
         self.initialize()
+
+    def goFromHRL(self):
+        self.moveRightTime(1.5)
+
+    def waitHRLPallet(self):
+        while True:
+            if not self.IF.Digital(self.PhotoEnd):
+                time.sleep(0.01)
+                if not self.IF.Digital(self.PhotoEnd):
+                    time.sleep(0.1)
+                    break
