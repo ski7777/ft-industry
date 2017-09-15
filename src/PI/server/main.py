@@ -12,6 +12,7 @@ IF0 = IF0Mod.Interface()
 F1 = IF0.F1
 F2 = IF0.F2
 Sled = IF0.Sled
+Stamp = IF0.Stamp
 
 TXT0 = TXT0Mod.Interface()
 TrafficLights = TXT0.TrafficLights
@@ -21,7 +22,7 @@ lastInit = 0
 
 
 def INITall():
-    HRL.initialize(F2)
+    HRL.initialize(Sled, F2)
     Sled.initialize(home=False)
     F1.initialize()
     F2.initialize()
@@ -44,11 +45,11 @@ while True:
         break
     print("Put the new pallet on the belt and press any key to continue!")
     input()
-    Sled.goPosBelt(Sled.POSBELTHANDOVER)
-    F1.moveForward()
-    Sled.moveLeft()
-    F2.moveLeft()
     palletStack.append(Palllet(findPalletID(palletStack)))
     currentPallet = palletStack[-1]
+    Sled.goPosBelt(Sled.POSBELTHANDOVER)
+    F1.moveLeft()
+    Sled.moveLeft()
+    F2.moveLeft()
     currentPallet.pos = currentPallet.POSF2
     HRL.moveIn(currentPallet)
