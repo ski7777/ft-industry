@@ -21,7 +21,7 @@ lastInit = 0
 
 
 def INITall():
-    HRL.initialize()
+    HRL.initialize(F2)
     Sled.initialize(home=False)
     F1.initialize()
     F2.initialize()
@@ -48,3 +48,7 @@ while True:
     F1.moveForward()
     Sled.moveLeft()
     F2.moveLeft()
+    palletStack.append(Palllet(findPalletID(palletStack)))
+    currentPallet = palletStack[-1]
+    currentPallet.pos = currentPallet.POSF2
+    HRL.moveIn(currentPallet)

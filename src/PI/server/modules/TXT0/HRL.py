@@ -8,6 +8,31 @@ import time
 class HRL():
     def __init__(self, com):
         self.com = com
+        self.isInit = False
+        self.Belt = None
+
+    def initialize(self, Belt):
+        self.Belt = Belt
+        # TODO: Add init command or wait for fttxpy ;-)
+        # send(...)
+        time.sleep(2)
+        self.isInit = True
+
+    def waitInitialize(self):
+        while not self.isInit:
+            pass
+
+    def moveIn(self, pallet):
+        pos = pallet.pos
+        assert(pos == pallet.POSF2)
+        self.send(True, pallet.id)
+        pallet.pos = pallet.POSHRL
+
+    def moveOut(self, pallet):
+        pos = pallet.pos
+        assert(pos == pallet.POSHRL)
+        self.send(False, pallet.id)
+        pallet.pos = pallet.POSF2
 
     def send(self, ea, nbr):
         # Send pallet_ID and input/output to self.com
